@@ -4,7 +4,7 @@
 //
 //  Created by Ron Arugeti on 15/03/2022.
 //
-
+#include <string.h>
 #include <stdio.h>
 
 int main(int argc, const char * argv[]) {
