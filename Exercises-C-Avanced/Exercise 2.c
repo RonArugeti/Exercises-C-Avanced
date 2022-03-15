@@ -2,7 +2,7 @@
 //  main.c
 //  Exercises-C-Avanced
 //
-//  Created by Ron Arugeti on 15/03/2022.
+//  Created by Ron Arugeti 
 //
 #include <string.h>
 #include <stdio.h>
