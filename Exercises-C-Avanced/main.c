@@ -6,9 +6,25 @@
 //
 #include <string.h>
 #include <stdio.h>
+typedef struct year{
+    char heberw[6];
+    int global;
+}year;
 
-int main(int argc, const char * argv[]) {
-    // insert code here...
-    printf("Hello, World!\n");
+typedef struct Worker{
+    int ID;
+    char* name;
+    int selary;
+    year* started;
+}Worker;
+
+typedef struct WorkerList {
+Worker* data;
+struct WorkerList* next;
+} WorkerList;
+
+int main() {
+    printf("How are you!\n");
     return 0;
 }
+
