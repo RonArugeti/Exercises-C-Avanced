@@ -7,24 +7,25 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-typedef struct Year{
-    char hebrew[7];
-    unsigned long global;
-}Year;
+
+
 
 typedef struct Worker{
-    unsigned long ID;
-    char* Name;
-    unsigned long Selary;
-    Year started;
-}Worker;
+    unsigned long ID;     //"ID" is only positive number representing the id of the worker
+    char* Name;    //"Name" represent the name of the worker
+    unsigned long Selary;   //"Salery" is only a positive number representing the salery of the worker
+    union Year{
+       char hebrew[7];
+       unsigned long global;
+    }year;                   //"year" used as a field in worker structure
+    }Worker;          //"Worker" is a structure of worker's data
 
 typedef struct WorkerList {
 Worker* data;
 struct WorkerList* next;
-} WorkerList;
+} WorkerList;            //"WorkerList" is a list of workers data
 
-Worker* CreateWorker(unsigned long id, char* name, unsigned long sel, char year1[7], unsigned long year2, int start);
+Worker* CreateWorker(unsigned long id, char* name, unsigned long sel, char year1[7], unsigned long year2, int start);s
 void PrintWorker(Worker* wr, int start);
 WorkerList * addWorker(WorkerList *head, Worker * w);
 int index_r(WorkerList* head, unsigned long id);
@@ -40,18 +41,18 @@ int main() {
     Wr->Name = (char*)malloc((int)strlen(name) +1);
     strcpy(Wr->Name,name);
     if (start)
-        strcpy(Wr->started.hebrew, year1);
+    strcpy(Wr->year.hebrew, year1);
     else
-        Wr->started.global = year2;
+        Wr->year.global = year2;
     return Wr;
 }void PrintWorker(Worker* wr, int start){
     printf("Worker's Name: %s", wr->Name);
     printf("Worker's ID: %lu", wr->ID);
     printf("Worker's Salery: %lu", wr->Selary);
 if (start)
-    printf("Worker's starting year: %s", wr->started.hebrew);
+    printf("Worker's starting year: %s", wr->year.hebrew);
 else
-    printf("Worker's starting year: %lu", wr->started.global);
+    printf("Worker's starting year: %lu", wr->year.global);
 }WorkerList * addWorker(WorkerList *head, Worker * w){
    static WorkerList *temp1, *temp2, *temp3;
     do {
@@ -91,31 +92,25 @@ else
     }
     return k;
 }WorkerList* deleteWorstWorker(WorkerList *head){
- static WorkerList* temp1, *temp2, *temp3;
-   
-    do {
+ static WorkerList *temp1, *temp2;
+    if (!temp2)
         temp1 = head;
-        temp2 = head;
-        if (!head) {
-            return temp1;
+    if(!head){
+        printf("List is empty!\n");
+        return temp1;
+    }
+        if(!head->next) {
+            if (head->data->Selary < temp2->data->Selary){
+                free(head->data->Name);
+            head = NULL;
+            }
+                return temp1;
         }
-    } while (!temp2);
-    while (head->next && temp2->next) {
-    if (head->data->Selary < temp2->data->Selary) {
+    if (head->data->Selary < temp2->data->Selary)
     temp2 = head;
-    }}
-    if (!head->next){
-        if (head->next->data->Selary < temp2->data->Selary) {
-            temp2 = head->next;
-            temp3 = head;
-        }
-        return;
-    }
+     
     deleteWorstWorker(head->next);
-    if (!temp2->next){
-        
-        temp3->next = temp2;
-    }
+   
     return temp1;
 }
 
