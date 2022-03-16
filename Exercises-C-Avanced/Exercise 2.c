@@ -90,6 +90,32 @@ else
         temp = temp->next;
     }
     return k;
+}WorkerList* deleteWorstWorker(WorkerList *head){
+ static WorkerList* temp1, *temp2, *temp3;
+   
+    do {
+        temp1 = head;
+        temp2 = head;
+        if (!head) {
+            return temp1;
+        }
+    } while (!temp2);
+    while (head->next && temp2->next) {
+    if (head->data->Selary < temp2->data->Selary) {
+    temp2 = head;
+    }}
+    if (!head->next){
+        if (head->next->data->Selary < temp2->data->Selary) {
+            temp2 = head->next;
+            temp3 = head;
+        }
+        return;
+    }
+    deleteWorstWorker(head->next);
+    if (!temp2->next){
+        
+        temp3->next = temp2;
+    }
+    return temp1;
 }
-
 
