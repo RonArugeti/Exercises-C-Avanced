@@ -21,11 +21,11 @@ struct WorkerList* next;
 
 Worker* CreateWorker(unsigned long id, char* name, unsigned long sel, char year1[7], unsigned long year2, int start);
 void PrintWorker(Worker* wr, int start);
-WorkerList * addWorker(WorkerList *head, Worker * w);
+WorkerList* addWorker(WorkerList *head, Worker * w);
 int index_r(WorkerList* head, unsigned long id);
 int index_l(WorkerList* head, unsigned long id);
 void update_worker(WorkerList *head, float percent);
-WorkerList *reverse(WorkerList *head);
+WorkerList* reverse(WorkerList *head);
 void freeWorkers(WorkerList *head);
 void print_e(void);
 
@@ -35,7 +35,7 @@ unsigned long id = 0, salary = 0, g_year = 0;
     int start;
 
 int main() {
-    WorkerList List_w;
+    WorkerList* List_w = (struct WorkerList*)malloc(sizeof(struct WorkerList));
     Worker* worker1 = (struct Worker*)malloc(sizeof(struct Worker));
     Worker* worker2 = (struct Worker*)malloc(sizeof(struct Worker));
     Worker* worker3 = (struct Worker*)malloc(sizeof(struct Worker));
@@ -50,14 +50,16 @@ int main() {
     worker3 = CreateWorker(id, full_name, salary, h_year, g_year, start);
     free(full_name);
 
-    addWorker(&List_w, worker1);
-    addWorker(&List_w, worker2);
-    addWorker(&List_w, worker3);
+    addWorker(List_w, worker1);
+    addWorker(List_w, worker2);
+    addWorker(List_w, worker3);
 
-    PrintWorker((&List_w)->data, 1);
-    PrintWorker((&List_w)->next->data, 1);
-    PrintWorker((&List_w)->next->next->data, 1);
+    PrintWorker(List_w->data, 1);
+    PrintWorker(List_w->next->data, 0);
+    PrintWorker(List_w->next->next->data, 0);
+    reverse(List_w);
 
+    
     return 0;
 }
 Worker* CreateWorker(unsigned long id, char* name, unsigned long sal, char year1[7], unsigned long year2, int start)
@@ -95,7 +97,8 @@ else
 WorkerList *addWorker(WorkerList *head, Worker *w)
 {
     WorkerList *temp = (struct WorkerList*)malloc(sizeof(struct WorkerList));
-    if (!temp) {printf("allocation failed");exit(1);}
+    
+    if (!temp) { printf("allocation failed"); exit(1);}
     if (!head){
         temp->data = w;
         return temp;
@@ -169,26 +172,26 @@ void update_worker(WorkerList *head, float percent)
     }
     return;
 }
-WorkerList *reverse(WorkerList *head)
+WorkerList* reverse(WorkerList *head)
 {
-   static WorkerList *temp;
-    if (!head->next) {
+    if (!head->next)
+    {
         return head;
     }
-    temp = reverse(head->next);
-    temp->next = head;
-    head->next = NULL;
-    return temp;
+   return reverse(head->next)->next = head;
 }
 void freeWorkers(WorkerList *head)
 {
-    static WorkerList *temp;
-    while (!head) {
-        temp = head;
-        head = head->next;
+    WorkerList *temp = (struct WorkerList*)malloc(sizeof(WorkerList));
+    if (!temp) { printf("allocation faild!\n"); exit(1); }
+    while (head)
+    {
+        temp = head->next;
         free(temp->data->Name);
         free(temp->data);
+        head = head->next;
     }
+    free(temp);
     return;
 }
 void print_e(void)
