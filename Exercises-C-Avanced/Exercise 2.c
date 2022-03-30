@@ -34,7 +34,8 @@ unsigned long id = 0, salary = 0, g_year = 0;
     char* full_name;
     int start;
 
-int main() {
+int main()
+{
     WorkerList* List_w = (struct WorkerList*)malloc(sizeof(struct WorkerList));
     Worker* worker1 = (struct Worker*)malloc(sizeof(struct Worker));
     Worker* worker2 = (struct Worker*)malloc(sizeof(struct Worker));
@@ -59,7 +60,6 @@ int main() {
     PrintWorker(List_w->next->next->data, 0);
     reverse(List_w);
 
-    
     return 0;
 }
 Worker* CreateWorker(unsigned long id, char* name, unsigned long sal, char year1[7], unsigned long year2, int start)
@@ -67,7 +67,7 @@ Worker* CreateWorker(unsigned long id, char* name, unsigned long sal, char year1
     fseek(stdin, 0, SEEK_END);
     Worker* Wr = (Worker*)malloc(sizeof(Worker)); //memory allocation for "Wr" - which is pointer for worker structure
     if (!Wr) {
-        printf("allocation failed\n");
+        printf("allocation failed!\n");
         exit(1);
     } //checking for seuccses in allocation
     Wr->ID = id; //setting value of the ID in "Wr"
@@ -96,20 +96,31 @@ else
 }
 WorkerList *addWorker(WorkerList *head, Worker *w)
 {
-    WorkerList *temp = (struct WorkerList*)malloc(sizeof(struct WorkerList));
+    WorkerList *temp1 = (struct WorkerList*)malloc(sizeof(struct WorkerList));
+    WorkerList *temp2 = (struct WorkerList*)malloc(sizeof(struct WorkerList));
+    if (!temp1 || !temp2) { printf("allocation failed!\n"); exit(1);}
     
-    if (!temp) { printf("allocation failed"); exit(1);}
-    if (!head){
-        temp->data = w;
-        return temp;
+    if (head == NULL){ temp1->data = w; temp1->next = NULL; return temp1;}
+    temp1 = temp2 = head;
+    if (temp1->next != NULL) {
+        while (temp1) {
+     if ((temp1->data->Salary > w->Salary) || (temp1->next->data->Salary < w->Salary)) {
+         temp2->next = temp1->next;
+         temp1->next = temp2;
+         temp2->data = w;
+     }
+            temp1 = temp1->next;
+        }}
+    else if (temp1->data->Salary > w->Salary)
+    {
+        temp1->data = w;
+        head->next = temp1;
     }
-    temp = head;
-    while (temp->next != NULL) {
-        temp = temp->next;
-        temp->next = NULL;
-    }
-    temp->next->data = w;
-    return temp;
+else {
+    temp1->next = head;
+    temp1->data = w;
+}
+    return head;
 }
 int index_r(WorkerList* head, unsigned long id)
 {
@@ -175,15 +186,15 @@ void update_worker(WorkerList *head, float percent)
 WorkerList* reverse(WorkerList *head)
 {
     if (!head->next)
-    {
         return head;
-    }
+    
    return reverse(head->next)->next = head;
 }
 void freeWorkers(WorkerList *head)
 {
     WorkerList *temp = (struct WorkerList*)malloc(sizeof(WorkerList));
     if (!temp) { printf("allocation faild!\n"); exit(1); }
+    temp = head;
     while (head)
     {
         temp = head->next;
